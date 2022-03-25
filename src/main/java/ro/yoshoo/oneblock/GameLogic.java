@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import ro.yoshoo.oneblock.data.PlayerData;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -60,20 +62,20 @@ public class GameLogic extends BukkitRunnable {
         }
         onlinePlayers = Config.getDefaultWorld().getPlayers();
         Collections.shuffle(onlinePlayers);
+        int x = plugin.getConfig().getInt("x",0);
+        int y = plugin.getConfig().getInt("y",0);
+        int z = plugin.getConfig().getInt("z",0);
         for (Player player : onlinePlayers){
             String name = player.getName();
             if(!existPlayer(name)){
                 continue;
             }
             int id = getID(name);
-            int obXpos = id * Integer.parseInt(plugin.getConfig().getString("space", "100"));
-
-            int x = plugin.getConfig().getInt("x",0);
-            int y = plugin.getConfig().getInt("y",0);
-            int z = plugin.getConfig().getInt("z",0);
+            int obXpos = id * plugin.getConfig().getInt("space", 100);
             Block block = Config.getDefaultWorld().getBlockAt(x + obXpos, y, z);
             if(block.isEmpty()){
                 PlayerData currentPlayer = data.getPlayers().get(id);
+
             }
         }
     }
