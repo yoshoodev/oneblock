@@ -1,4 +1,4 @@
-package ro.yoshoo.oneblock;
+package ro.yoshoo.oneblock.data;
 
 import org.bukkit.boss.BossBar;
 
@@ -12,6 +12,20 @@ public class PlayerData {
     private int level = 0;
     private int breaks = 0;
     private BossBar bossbar = null;
+
+    public PlayerData(String name){
+        this.username = name;
+    }
+
+    public PlayerData(String name, BossBar bar){
+        this(name);
+        this.bossbar = bar;
+    }
+
+    public PlayerData(String name, BossBar bar, List<String> invited){
+        this(name,bar);
+        this.allies.addAll(invited);
+    }
 
     public void levelUp(){
         ++level;
