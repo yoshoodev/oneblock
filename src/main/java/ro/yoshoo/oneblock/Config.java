@@ -27,6 +27,16 @@ public class Config {
         Config.world = defaultWorld;
     }
 
+    private static World leaveworld;
+
+    public static World getLeaveworld() {
+        return leaveworld;
+    }
+
+    public static void setLeaveworld(World leaveworld) {
+        Config.leaveworld = leaveworld;
+    }
+
 
     int getMajorVersion() {
         String[] split = Bukkit.getBukkitVersion().split("-")[0].split("\\.");
@@ -55,6 +65,8 @@ public class Config {
         FileConfiguration config = plugin.getConfig();
         String worldName = config.getString(DEFAULT_WORLD, DEFAULT_WORLD);
         setDefaultWorld(plugin.getServer().getWorld(worldName));
+        String leaveWorldName = config.getString("leaveworld",DEFAULT_WORLD);
+        setLeaveworld(plugin.getServer().getWorld(leaveWorldName));
     }
 
     void start(){
