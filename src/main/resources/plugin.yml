@@ -1,0 +1,7 @@
+name: Oneblock
+version: '${project.version}'
+main: ro.yoshoo.oneblock.Oneblock
+api-version: 1.18
+authors: [ Yoshoo ]
+description: Minecraft Oneblock Plugin
+website: https://github.com/yoshoodev
