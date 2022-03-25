@@ -5,3 +5,22 @@ api-version: 1.18
 authors: [ Yoshoo ]
 description: Minecraft Oneblock Plugin
 website: https://github.com/yoshoodev
+
+commands:
+  oneblock:
+    aliases: ob
+    description: Oneblock main command.
+    usage: /<command>
+    permission: oneblock.join
+
+permissions:
+  oneblock.set:
+    description: For admin
+    default: op
+  oneblock.join:
+    description: For all
+    default: true
+  oneblock.invite:
+    default: true
+  oneblock.ignoreBarrier:
+    default: op
