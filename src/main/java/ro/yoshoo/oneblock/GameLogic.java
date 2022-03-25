@@ -2,6 +2,7 @@ package ro.yoshoo.oneblock;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,7 +21,7 @@ public class GameLogic extends BukkitRunnable {
         data = dataInstance;
     }
 
-    private boolean existPlayer(String name){
+    public boolean existPlayer(String name){
         for(PlayerData player : data.getPlayers()){
             if(player.getUsername() == null){
                 continue;
@@ -35,7 +36,7 @@ public class GameLogic extends BukkitRunnable {
         return false;
     }
 
-    private int getID(String name){
+    public int getID(String name){
         for(int i = 0; i < data.getPlayers().size(); i++){
             PlayerData player = data.getPlayers().get(i);
             if(player.getUsername() == null){
@@ -51,32 +52,51 @@ public class GameLogic extends BukkitRunnable {
         return 0;
     }
 
+    int x;
+    int y;
+    int z;
+
     @Override
     public void run() {
-        if(!data.on){
+//        Check if plugin should be running
+        if(!GameData.isOn()){
             try {
                 this.cancel();
             } catch (IllegalStateException e){
                 Bukkit.getLogger().severe(ChatColor.RED +"Error in cancelling the game logic task !");
             }
         }
+//        Get online players and add them to a collection.
         onlinePlayers = Config.getDefaultWorld().getPlayers();
         Collections.shuffle(onlinePlayers);
-        int x = plugin.getConfig().getInt("x",0);
-        int y = plugin.getConfig().getInt("y",0);
-        int z = plugin.getConfig().getInt("z",0);
+//        Initialize start coordinates from config.
+        x = plugin.getConfig().getInt("x",0);
+        y = plugin.getConfig().getInt("y",0);
+        z = plugin.getConfig().getInt("z",0);
+//        Logic for each player online.
         for (Player player : onlinePlayers){
             String name = player.getName();
+//            If player didn't join OB then skip.
             if(!existPlayer(name)){
                 continue;
             }
+//            Get player ID and his personal Block x distance. (e.g 100blocks from O)
             int id = getID(name);
             int obXpos = id * plugin.getConfig().getInt("space", 100);
             Block block = Config.getDefaultWorld().getBlockAt(x + obXpos, y, z);
             if(block.isEmpty()){
                 PlayerData currentPlayer = data.getPlayers().get(id);
-
+                fallProtect(player, obXpos);
             }
         }
     }
+
+    private void fallProtect(Player player, int obpX){
+        Location location = player.getLocation();
+        if (location.getBlockX() == x + obpX && location.getY() - 1 < y && location.getBlockZ() == z) {
+            location.setY((double) y + 1);
+            player.teleport(location);
+        }
+    }
+
 }
