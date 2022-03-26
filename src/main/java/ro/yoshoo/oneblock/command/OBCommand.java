@@ -148,11 +148,26 @@ public class OBCommand implements CommandExecutor {
         leaveworld=location.getWorld();
         FileConfiguration config = plugin.getConfig();
         config.set("leaveworld",leaveworld.getName());
+        Config.setLeaveworld(leaveworld);
         config.set("xleave",location.getX());
         config.set("yleave",location.getY());
         config.set("zleave",location.getZ());
         Bukkit.getLogger().info(ChatColor.GREEN + "Saving config file !");
         plugin.saveConfig();
+        return true;
+    }
+
+    private boolean changeFrequency(String[] args,CommandSender sender){
+        if(args.length <= 1) {
+            return false;
+        }
+        int check = Integer.parseInt(args[1]);
+        if(check < 4 || check > 16){
+            sender.sendMessage(ChatColor.RED +"Value must be between 4 and 16 !");
+            return true;
+        }
+        FileConfiguration config = plugin.getConfig();
+        config.set("frequency",(long) check);
         return true;
     }
 
@@ -180,5 +195,17 @@ public class OBCommand implements CommandExecutor {
                     return true;
             }
         }
-        return true;
+        switch(args[0].toLowerCase()){
+            case("frequency"):
+                return changeFrequency(args, sender);
+            default:
+                sender.sendMessage(String.format("%s%s%n%s%n%s%n%s%s",
+                        ChatColor.DARK_RED,
+                        "  ▄▄    ▄▄",
+                        "█    █  █▄▀",
+                        "▀▄▄▀ █▄▀",
+                        "Created by Yoshoo\nPlugin version: v",
+                        "1.0"));
+                return true;
+        }
 }}
