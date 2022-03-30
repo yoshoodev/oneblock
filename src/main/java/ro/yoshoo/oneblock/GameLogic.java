@@ -13,15 +13,15 @@ import java.util.List;
 
 public class GameLogic extends BukkitRunnable {
     Oneblock plugin;
-    GameData data;
+    Game data;
     List<Player> onlinePlayers;
 
-    public GameLogic(Oneblock instance, GameData dataInstance) {
+    public GameLogic(Oneblock instance, Game dataInstance) {
         plugin = instance;
         data = dataInstance;
     }
 
-    public boolean existPlayer(String name){
+    private boolean existPlayer(String name){
         for(PlayerData player : data.getPlayers()){
             if(player.getUsername() == null){
                 continue;
@@ -36,7 +36,7 @@ public class GameLogic extends BukkitRunnable {
         return false;
     }
 
-    public int getID(String name){
+    private int getID(String name){
         for(int i = 0; i < data.getPlayers().size(); i++){
             PlayerData player = data.getPlayers().get(i);
             if(player.getUsername() == null){
@@ -59,7 +59,7 @@ public class GameLogic extends BukkitRunnable {
     @Override
     public void run() {
 //        Check if plugin should be running
-        if(!GameData.isOn()){
+        if(!Game.isOn()){
             try {
                 this.cancel();
             } catch (IllegalStateException e){
@@ -86,14 +86,14 @@ public class GameLogic extends BukkitRunnable {
             Block block = Config.getDefaultWorld().getBlockAt(x + obXpos, y, z);
             if(block.isEmpty()){
                 PlayerData currentPlayer = data.getPlayers().get(id);
-                fallProtect(player, obXpos);
+                fallProtect(player, currentPlayer);
             }
         }
     }
 
-    private void fallProtect(Player player, int obpX){
+    private void fallProtect(Player player, PlayerData currentPlayer){
         Location location = player.getLocation();
-        if (location.getBlockX() == x + obpX && location.getY() - 1 < y && location.getBlockZ() == z) {
+        if (location.getBlockX() == currentPlayer.getX() && location.getY() - 1 < y && location.getBlockZ() == currentPlayer.getZ()) {
             location.setY((double) y + 1);
             player.teleport(location);
         }

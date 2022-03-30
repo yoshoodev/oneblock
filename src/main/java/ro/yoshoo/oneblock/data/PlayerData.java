@@ -12,6 +12,8 @@ public class PlayerData {
     private int level = 0;
     private int breaks = 0;
     private BossBar bossbar = null;
+    private int x;
+    private int z;
 
     public PlayerData(String name){
         this.username = name;
@@ -81,4 +83,20 @@ public class PlayerData {
             return -1;
         return rhs.level - lhs.level;
     };
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
+    }
 }
