@@ -57,6 +57,7 @@ public class Game {
     }
 
     private void initBossBar(){
+        double multiplier = plugin.getConfig().getInt("level_multiplier", 5);
         if(!getPlayers().isEmpty()) {
             for (PlayerData player : getPlayers()) {
                 if (player.getBossbar() == null) {
@@ -64,7 +65,7 @@ public class Game {
                     String name = level.getName();
                     BarColor color = level.getColor();
                     BossBar tempBar = Bukkit.createBossBar(name, color, BarStyle.SEGMENTED_10, BarFlag.DARKEN_SKY);
-                    tempBar.setProgress(player.getBreaks());
+                    tempBar.setProgress(player.getBreaks() / (16 + (player.getLevel() * multiplier)));
                     player.setBossbar(tempBar);
                 }
             }
